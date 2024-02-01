@@ -86,11 +86,11 @@ pipeline {
 
         stage('Update Deployment file') {
             environment {
-                GIT_REPO_NAME = "End-to-End-Kubernetes-Three-Tier-DevSecOps-Project"
+                GIT_REPO_NAME = "k8s-argocd"
                 GIT_USER_NAME = "obusorezekiel"
             }
             steps {
-                dir('Kubernetes-Manifests-file/Frontend') {
+                dir('Kubernetes-Manifest/Frontend') {
                     withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                         sh '''
                             git config user.email "obusorezekiel@gmail.com"
