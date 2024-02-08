@@ -25,17 +25,17 @@ pipeline {
                 git branch: 'main', changelog: false, poll: false, url: 'https://github.com/obusorezekiel/k8s-argocd.git'
             }
         }
-        stage('Sonarqube Analysis') {
-            steps {
-                dir('Application-Code/frontend') {
-                    withSonarQubeEnv('sonar-server') {
-                        sh ''' $SCANNER_HOME/bin/sonar-scanner \
-                        -Dsonar.projectName=three-tier-frontend \
-                        -Dsonar.projectKey=three-tier-frontend '''
-                    }
-                }
-            }
-        }
+        // stage('Sonarqube Analysis') {
+        //     steps {
+        //         dir('Application-Code/frontend') {
+        //             withSonarQubeEnv('sonar-server') {
+        //                 sh ''' $SCANNER_HOME/bin/sonar-scanner \
+        //                 -Dsonar.projectName=three-tier-frontend \
+        //                 -Dsonar.projectKey=three-tier-frontend '''
+        //             }
+        //         }
+        //     }
+        // }
         // stage('Quality Check') {
         //     steps {
         //         script {
