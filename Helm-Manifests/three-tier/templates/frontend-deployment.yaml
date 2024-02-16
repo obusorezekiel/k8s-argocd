@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name.fe-name }}
+  namespace: {{ .Values.name.be-name }}
+  labels:
+    role: {{ .Values.labels.fe-role }}
+    env: {{ .Values.labels.fe-env }}
+spec:
+  replicas: {{ .Values.name.replicaCount }}
+  strategy:
+    type: {{ .Values.strategy.type }}
+    rollingUpdate:
+      maxSurge: {{ .Values.strategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.strategy.rollingUpdate.maxUnavailable }}
+  selector:
+    matchLabels:
+      role: {{ .Values.selector.matchLabels.fe-role }}
+  template:
+    metadata:
+      labels:
+        role: {{ .Values.template.metadata.labels.fe-role }}
+    spec:
+      containers:
+      - name: {{ .Values.name.fe-name }}
+        image: {{ .Values.image.repository }}/ezekiel-frontend:{{ .Values.image.fe-version }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+          - name: REACT_APP_BACKEND_URL
+            value: "http://mytoolings.xyz/api/tasks"
+        ports:
+        - containerPort: 3000

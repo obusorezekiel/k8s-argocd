@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name.be-name }}
+  namespace: {{ .Values.name.namespace }}
+  labels: 
+    role: {{ .Values.labels.be-role }}
+    env: {{ .Values.labels.be-env }}
+spec:
+  replicas: {{ .Values.name.replicaCount }}
+  strategy:
+    type: {{ .Values.strategy.type }}
+    rollingUpdate:
+      maxSurge: {{ .Values.strategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.strategy.rollingUpdate.maxUnavailable }}
+  selector: 
+    matchLabels:
+      role: {{ .Values.selector.matchLabels.be-role }}
+  template:
+    metadata:
+      labels:
+        role: {{ .Values.template.metadata.labels.role }}
+    spec:
+      containers:
+      - name: api
+        image: {{ .Values.image.repository }}/ezekiel-backend:{{ .Values.image.be-version }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+          - name: MONGO_CONN_STR
+            value: mongodb://mongodb-svc:27017/todo?directConnection=true
+          - name: MONGO_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: mongo-sec
+                key: username
+          - name: MONGO_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mongo-sec
+                key: password
+        ports:
+        - containerPort: 3500
+        livenessProbe: 
+          httpGet:
+            path: /ok
+            port: 3500
+          initialDelaySeconds: 2
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /ok
+            port: 3500
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+    
