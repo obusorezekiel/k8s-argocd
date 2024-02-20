@@ -35,8 +35,8 @@ template:
 
 image:
   repository: 353928175117.dkr.ecr.us-east-1.amazonaws.com/
-  fe-version: latest
-  be-version: latest
+  fe-version: 4
+  be-version: 4
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
